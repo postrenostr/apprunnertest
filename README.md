@@ -10,7 +10,7 @@ CrazyTrainAI is a full-stack subscription web application that allows customers 
 ├── server/        # Express backend with Stripe, OAuth, and Drizzle
 ├── shared/        # Shared database schema and Zod validators
 ├── vite.config.ts # Vite configuration shared by dev + prod
-└── package.json   # npm workspace configuration
+└── package.json   # Single npm project (server + client)
 ```
 
 ## Getting Started
@@ -57,6 +57,15 @@ CrazyTrainAI is a full-stack subscription web application that allows customers 
    ```bash
    npm run db:push
    ```
+
+## Deployment
+
+The repository now builds and runs as a single Node.js project. On DigitalOcean App Platform (or any Node hosting provider) you can use the following settings:
+
+- **Build command**: `npm run build`
+- **Run command**: `npm start`
+
+Both the Express API and the static React build are produced from the same commands, so no workspace or multi-build configuration is required.
 
 ## Key Features
 

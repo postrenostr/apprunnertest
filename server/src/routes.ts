@@ -5,7 +5,7 @@ import { ensureAuthenticated } from "./auth";
 import { storage } from "./storage";
 import { authorizeObjectRequest, normalizeObjectPath, setObjectAcl } from "./objectAcl";
 import { bucket, createSignedUploadUrl } from "./objectStorage";
-import type { AuthenticatedUser } from "@crazytrainai/shared/schema";
+import type { AuthenticatedUser } from "@shared/schema";
 import { z } from "zod";
 
 const postcardInputSchema = z.object({

@@ -1,1 +1,1 @@
-export * from "@crazytrainai/shared/schema";
+export * from "@shared/schema";
