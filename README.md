@@ -67,6 +67,16 @@ The repository now builds and runs as a single Node.js project. On DigitalOcean 
 
 Both the Express API and the static React build are produced from the same commands, so no workspace or multi-build configuration is required.
 
+### Verifying App Platform builds
+
+During a successful deployment App Platform emits log entries similar to the following:
+
+```
+Oct 05 15:43:51 │  ✔ uploaded app image to DOCR
+```
+
+Seeing this line confirms that the container image for the application was pushed to the DigitalOcean Container Registry (DOCR) and the deployment can proceed to the next stage.
+
 ## Key Features
 
 - **Authentication** – Google OAuth 2.0 with Passport.js and PostgreSQL-backed sessions.
