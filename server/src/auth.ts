@@ -5,7 +5,7 @@ import connectPgSimple from "connect-pg-simple";
 import type { Express, NextFunction, Request, Response } from "express";
 import { pool } from "./db";
 import { storage } from "./storage";
-import type { AuthenticatedUser } from "@crazytrainai/shared/schema";
+import type { AuthenticatedUser } from "@shared/schema";
 
 const PgSession = connectPgSimple(session);
 

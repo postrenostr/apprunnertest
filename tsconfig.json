@@ -1,8 +1,10 @@
 {
-  "files": [],
-  "references": [
-    { "path": "shared" },
-    { "path": "server" },
-    { "path": "client" }
-  ]
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["shared/src/*"]
+    }
+  },
+  "include": ["server/src", "client/src", "shared/src"]
 }
