@@ -2,7 +2,8 @@ import type { Express } from "express";
 import path from "node:path";
 
 export async function registerVite(app: Express) {
-  if (process.env.NODE_ENV === "production") {
+  const nodeEnv = process.env.NODE_ENV?.trim().toLowerCase() ?? "production";
+  if (nodeEnv !== "development") {
     return;
   }
 

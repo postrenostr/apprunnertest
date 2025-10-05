@@ -8,6 +8,9 @@ import { registerVite } from "./vite";
 
 const app = express();
 
+const nodeEnv = process.env.NODE_ENV?.trim().toLowerCase() ?? "production";
+const isProduction = nodeEnv !== "development";
+
 app.use(cors({ origin: process.env.CLIENT_ORIGIN ?? true, credentials: true }));
 app.use(morgan("dev"));
 
@@ -27,7 +30,7 @@ app.use(express.static(distPath));
 
 registerRoutes(app);
 
-if (process.env.NODE_ENV === "production") {
+if (isProduction) {
   app.get("*", (req, res, next) => {
     if (req.path.startsWith("/api") || req.path.startsWith("/objects")) {
       return next();
