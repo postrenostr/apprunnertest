@@ -1,4 +1,4 @@
-import type { Express, Request } from "express";
+import type { Express, Request, Response } from "express";
 import express from "express";
 import Stripe from "stripe";
 import { ensureAuthenticated } from "./auth";
@@ -27,12 +27,23 @@ const uploadRequestSchema = z.object({
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 
 if (!stripeSecretKey) {
-  throw new Error("STRIPE_SECRET_KEY is not configured");
+  console.warn("STRIPE_SECRET_KEY is not configured. Stripe functionality disabled.");
 }
 
-const stripe = new Stripe(stripeSecretKey, {
-  apiVersion: "2023-10-16"
-});
+const stripe = stripeSecretKey
+  ? new Stripe(stripeSecretKey, {
+      apiVersion: "2023-10-16"
+    })
+  : null;
+
+function ensureStripeConfigured(res: Response) {
+  if (!stripe) {
+    res.status(503).json({ error: "Stripe integration is not configured" });
+    return false;
+  }
+
+  return true;
+}
 
 function getAuthedUser(req: Request): AuthenticatedUser | undefined {
   return req.user as AuthenticatedUser | undefined;
@@ -69,6 +80,8 @@ export function registerRoutes(app: Express) {
 
   router.post("/create-subscription", ensureAuthenticated, async (req, res, next) => {
     try {
+      if (!ensureStripeConfigured(res)) return;
+
       const user = getAuthedUser(req);
       if (!user) return res.status(401).json({ error: "Unauthorized" });
 
@@ -120,6 +133,8 @@ export function registerRoutes(app: Express) {
 
   router.get("/subscription-status", ensureAuthenticated, async (req, res, next) => {
     try {
+      if (!ensureStripeConfigured(res)) return;
+
       const user = getAuthedUser(req);
       if (!user) return res.status(401).json({ error: "Unauthorized" });
 
@@ -146,6 +161,8 @@ export function registerRoutes(app: Express) {
 
   router.post("/create-portal-session", ensureAuthenticated, async (req, res, next) => {
     try {
+      if (!ensureStripeConfigured(res)) return;
+
       const user = getAuthedUser(req);
       if (!user) return res.status(401).json({ error: "Unauthorized" });
 
@@ -244,6 +261,8 @@ export function registerRoutes(app: Express) {
 
   router.post("/postcard-orders", ensureAuthenticated, async (req, res, next) => {
     try {
+      if (!ensureStripeConfigured(res)) return;
+
       const user = getAuthedUser(req);
       if (!user) return res.status(401).json({ error: "Unauthorized" });
       const dbUser = await storage.getUser(user.claims.sub);
